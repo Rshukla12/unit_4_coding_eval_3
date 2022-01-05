@@ -36,7 +36,6 @@ export const getSearch = ( q, p, perPage ) => ( dispatch ) => {
         }
     )
     .then( res => {
-        console.log( res.data );
         dispatch( successSearch( res.data ) );
     })
     .catch( err => {
