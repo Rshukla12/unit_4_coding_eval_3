@@ -1,10 +1,11 @@
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const Search = () => {
-    const params = useParams();
-    console.log(params);
+    const { search } = useLocation();
+    const res = search.slice(search.indexOf("=") + 1 );
+    
     return (
-        <div>Search</div>
+        <div>Search {res}</div>
     )
 }
 
