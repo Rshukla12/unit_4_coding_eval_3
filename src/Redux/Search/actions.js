@@ -36,7 +36,7 @@ export const getSearch = ( q, p, perPage ) => ( dispatch ) => {
         }
     )
     .then( res => {
-        dispatch( successSearch( res.data ) );
+        dispatch( successSearch( res.data.items ) );
     })
     .catch( err => {
         dispatch( failSearch( err ) );

@@ -26,7 +26,7 @@ const searchReducer = ( state=initSearch, action ) => {
         case ( searchConstants.SEARCH_SUCCESS ): {
             return {
                 ...state,
-                isLoading: true,
+                isLoading: false,
                 isError: false,
                 data: action.payload.data
             }

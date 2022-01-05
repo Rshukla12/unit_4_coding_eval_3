@@ -5,8 +5,12 @@ import { getSearch } from "../Redux/Search/actions";
 import Container from "@mui/material/Container";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
-import { FormControl, MenuItem } from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
 import { makeStyles } from "@mui/styles";
+import Pagination from "../Components/Pagination";
+import { Grid } from "@mui/material";
+import GitCard from "../Components/GitCard";
 
 const useStyles = makeStyles({
     root: {
@@ -24,11 +28,11 @@ const Search = () => {
     const dispatch = useDispatch();
     
     const { isAuth } = useSelector(state=>state.auth, shallowEqual);    
-    const { data, isLoading, isError, error  } = useSelector(state=>state.search, shallowEqual);    
+    const { data, isLoading, isError  } = useSelector(state=>state.search, shallowEqual);    
     const res = search.slice(search.indexOf("=") + 1 );
     
     const [ page, setPage ] = useState(1);
-    const [ perPage, setPerPage ] = useState(10);
+    const [ perPage, setPerPage ] = useState(5);
     
     const styles = useStyles();
 
@@ -38,27 +42,51 @@ const Search = () => {
     }
 
     useEffect( () => {
-        res && dispatch( getSearch( res, perPage, page ) );
-        console.log( perPage, data )
+        res && dispatch( getSearch( res, page, perPage ) );
     }, [res, perPage, page, dispatch]); 
 
     if ( !isAuth ) return <Redirect to="/login" />
 
     return (
-        <Container className={styles.root}>
-            <FormControl >
-                <InputLabel id="per-page">Per Page</InputLabel>
-                <Select color="secondary" labelId="per-page" value={perPage} onChange={handlePerPage} label="Per Page" >
-                    { 
-                        [10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map(item => (
-                            <MenuItem value={item} >{item}</MenuItem>
-                        ))
-                    }
-                </Select>
-                
-
-            </FormControl>
-            Search
+        <Container>
+            {
+                isLoading ? (
+                    <div className={styles.loading}>...Loading</div>
+                ) : isError ? (
+                    <div>Something went wrong</div>
+                ) : (
+    
+                    <Container className={styles.root}>
+                        <FormControl >
+                            <InputLabel id="per-page">Per Page</InputLabel>
+                            <Select color="secondary" labelId="per-page" value={perPage} onChange={handlePerPage} label="Per Page" >
+                                { 
+                                    [5, 10, 30, 50, 70, 100].map(item => (
+                                        <MenuItem value={item} key={item*100}>{item}</MenuItem>
+                                    ))
+                                }
+                            </Select>
+                        </FormControl>
+                        <Grid container spacing={2}>
+                                {
+                                    data.map( repo => (
+                                        <Grid item xl={4} lg={4} md={6} sm={12}>
+                                            <GitCard
+                                                name={repo.name}
+                                                url={repo.url}
+                                                fullName={repo.full}
+                                                owner={repo.owner}
+                                            />
+                                                
+                                        </Grid>
+                                    ))
+                                }
+    
+                        </Grid>
+                        <Pagination n={10} active={page} onChange={setPage}/>
+                    </Container>
+                )
+            }
         </Container>
     )
 }
