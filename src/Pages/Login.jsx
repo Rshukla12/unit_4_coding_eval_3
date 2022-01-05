@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, shallowEqual } from "react-redux";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { loginUser } from "../Redux/Auth/actions";
@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
 const Login = () => {
-    const isAuth = useSelector(state=>state.isAuth);    
+    const { isAuth } = useSelector(state=>state.auth, shallowEqual);    
     const dispatch = useDispatch();
     
     const handleLogin = () => {

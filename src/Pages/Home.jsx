@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useSelector, shallowEqual } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
@@ -20,7 +20,7 @@ const useStyles = makeStyles({
 })
 
 const Home = () => {
-    const isAuth = useSelector(state=>state.isAuth);    
+    const { isAuth } = useSelector(state=>state.auth, shallowEqual);    
     const [query, setQuery] = useState("")
     const history = useHistory();
     const styles = useStyles();
